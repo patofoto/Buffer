@@ -836,6 +836,7 @@ void USB_Serial_Analys(void){
 				Serial.println(encoder_length);
 			}
 			else if(strstr(serial_buf.c_str(),"info")){
+				Serial.println("version=" FIRMWARE_VERSION);
 				Serial.println("encoder_length="+String(encoder_length));
 				Serial.println("timeout="+String(timeout));
 				Serial.println("steps="+String(steps));

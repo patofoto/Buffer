@@ -85,6 +85,8 @@
 
 
 
+#define FIRMWARE_VERSION "v1.1-voron.1" // 固件版本，info命令输出 (reported by the info command; match the git tag)
+
 #define DRIVER_ADDRESS 0b00 // TMC Driver address according to MS1 and MS2
 #define R_SENSE 0.11f // Match to your driver
 
