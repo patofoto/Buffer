@@ -323,6 +323,32 @@ void read_sensor_state(void)
 }
 
 /**
+  * @brief  按住按键/信号期间刷新断料输出和耗材指示灯（不控制电机）
+  *         Keep the runout output (PB15) and filament LED in step with the
+  *         filament switch while a key or FRONT/BACK signal is held.
+  *         motor_control() waits in a loop until release and would otherwise
+  *         leave the output frozen, so a host retracting via the BACK signal
+  *         could not see the filament leave. Does not touch the motor.
+  * @param  NULL
+  * @retval NULL
+**/
+static void update_runout_output(void)
+{
+	bool no_filament;
+	if(connet_mdm_flag) no_filament=digitalRead(ENDSTOP_3)&&!digitalRead(MDM_DPIN);
+	else no_filament=digitalRead(ENDSTOP_3);
+
+	if(no_filament){
+		digitalWrite(DUANLIAO,0);
+		digitalWrite(START_LED,0);
+	}
+	else if(!blockage_detect.blockage_flag){//不覆盖堵料输出 (don't override a clog signal)
+		digitalWrite(DUANLIAO,1);
+		digitalWrite(START_LED,1);
+	}
+}
+
+/**
   * @brief  电机控制
   * @param  NULL
   * @retval NULL
@@ -389,6 +415,7 @@ void motor_control(void)
 		while(key1_press_flag||digitalRead(BACK_SIGNAL_PIN)==LOW){
 			delay(1);
 			g_run_cnt++;
+			update_runout_output();
 			// Serial.println("key1_press_flag is true ");
 		}//等待松手
 					
@@ -414,6 +441,7 @@ void motor_control(void)
 		while(key2_press_flag||digitalRead(FRONT_SIGNAL_PIN)==LOW){
 			delay(1);
 			g_run_cnt++;
+			update_runout_output();
 		};//等待松手
 					
 
