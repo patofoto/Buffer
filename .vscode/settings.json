@@ -52,5 +52,11 @@
         "iwdg.h": "c",
         "stm32f0xx_hal.h": "c",
         "stm32f0xx_hal_iwdg.h": "c"
-    }
+    },
+    "cSpell.words": [
+        "BAUDRATE",
+        "ststm",
+        "USBCON",
+        "USBD"
+    ]
 }
